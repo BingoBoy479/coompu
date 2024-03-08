@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <ctype.h>//needed this one for isaplha and isdigit
 #include <string.h>
 
 char separators[12]={'{','}','(',')',';',',','#','/','"','\\','\'','='};
@@ -42,7 +42,7 @@ we are haveing name for the refrence pointer*/
     End//int 10
 } Type_Keyword;
 
-char *operator[3]={"==","<",">"};
+char *operator[3]={"==","<",">","!="};
 typedef enum
 /*if u write name here then u are naming the enum but 
 when u write name at line19 aka end of curly bracket then
@@ -50,7 +50,8 @@ we are haveing name for the refrence pointer*/
 {
     Equals,
     Less_than,
-    Greater_than
+    Greater_than,
+    Not_Equals
 }Type_Operator;
 
 
@@ -191,7 +192,7 @@ int main(int argc, char *argv[])
     }
     
     FILE* fp=removing_new_line(argv[1],argv[2]);
-    
+    /* fp is the outputed intermediate */
     printf("Hi!\n");
     printf("%d\n",sizeof(int));
     Token *mytoken = malloc(sizeof(Token));
