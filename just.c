@@ -182,7 +182,7 @@ FILE* removing_new_line(char* in, char* out){
     fclose(fp_input);
     return fp_output;
 }
-
+char *current = 0;
 int main(int argc, char *argv[]) 
 {
     if (argc != 3) 
@@ -192,7 +192,19 @@ int main(int argc, char *argv[])
     }
     
     FILE* fp=removing_new_line(argv[1],argv[2]);
-    /* fp is the outputed intermediate */
+    /* fp is the outputed intermediate */    
+    
+    fseek(fp, 0, SEEK_END);
+    int length = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+
+    current = malloc(sizeof(char) * length+1);
+    fread(current, 1, length, file);
+
+    fclose(fp);
+
+    current[length] = '\0';//ensures no buffer overflow occurs
+    int current_index = 0;
     printf("Hi!\n");
     printf("%d\n",sizeof(int));
     Token *mytoken = malloc(sizeof(Token));
