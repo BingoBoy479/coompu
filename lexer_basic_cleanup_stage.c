@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
     fseek(fp, 0, SEEK_SET);
 
     current = malloc(sizeof(char) * length+1);
-    fread(current, 1, length, file);
+    fread(current, 1, length, fp);
 
     fclose(fp);
 
