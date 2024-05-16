@@ -173,7 +173,29 @@ FILE* removing_new_line(char* in, char* out){
         printf("Output file not opened");
         exit(1);
     }
+    int next_char=0;
     while ((c=fgetc(fp_input)) != EOF) {
+        //checking for comments 
+        if (c=='/')
+        {
+            //case in point the condition where we encounter a comment
+            if ((next_char=fgetc(fp_input))=='/')
+            {
+                while((next_char=fgetc(fp_input))!='\n');
+                c=next_char;
+                next_char=0;
+            }
+            else if((next_char=fgetc(fp_input))=='*')
+            {
+                while(((next_char=fgetc(fp_input))!='*')&&((next_char=fgetc(fp_input))!='/'));
+                c=next_char;
+                next_char=0;
+            }
+            else
+            {
+                ungetc(next_char,fp_input);
+            }            
+        }
         if (c != '\n' && c != '\r') {
             fputc(c, fp_output);
         }
@@ -211,11 +233,11 @@ int main(int argc, char *argv[])
     assignTokenValue(mytoken,"separator","#");
     printf("%s\n",mytoken->name);
     printf("%d\n",(int)mytoken->t.to);
-    for (size_t i = 0; i < 31; i++)
+    for (int i = 0; i < 31; i++)
     {
         resize_and_add(mytoken);
     }
-    for (size_t i = 0; i < 31; i++)
+    for (int i = 0; i < 31; i++)
     {
         printf("%d\n",i);
         printf("%s\n",main_array[i].name);
