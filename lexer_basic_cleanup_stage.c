@@ -230,6 +230,9 @@ int main(int argc, char *argv[])
 
     current[length] = '\0';//ensures no buffer overflow occurs
     int current_index = 0;
+
+
+    
     printf("Hi!\n");
     printf("%d\n",sizeof(int));
     Token *mytoken = malloc(sizeof(Token));
