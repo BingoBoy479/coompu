@@ -161,7 +161,6 @@ void resize_and_add(Token *t) {
 FILE* removing_new_line(char* in, char* out){
     FILE* fp_input; 
     FILE* fp_output;
-    char line[1024];
     int c;
     fp_input=fopen(in,"r");
     if(fp_input==NULL){
@@ -173,35 +172,39 @@ FILE* removing_new_line(char* in, char* out){
         printf("Output file not opened");
         exit(1);
     }
-    int next_char=0;
+    
     while ((c=fgetc(fp_input)) != EOF) {
-        //checking for comments 
-        if (c=='/')
-        {
-            //case in point the condition where we encounter a comment
-            if ((next_char=fgetc(fp_input))=='/')
-            {
-                while((next_char=fgetc(fp_input))!='\n');
-                c=next_char;
-                next_char=0;
+        // checking for comments 
+        if (c == '/') {
+            // case in point the condition where we encounter a comment
+            int next_char = fgetc(fp_input);
+            if (next_char == '/') {
+                // single-line comment
+                while ((c=fgetc(fp_input)) != '\n' && c != EOF);
+                continue;  // continue to the next character after newline
+            } else if (next_char == '*') {
+                // multi-line comment
+                int prev_char = 0;
+                while ((c=fgetc(fp_input)) != EOF) {
+                    if (prev_char == '*' && c == '/') {
+                        break;  // end of multi-line comment
+                    }
+                    prev_char = c;
+                }
+                continue;  // continue to the next character after comment
+            } else {
+                // not a comment, put back the character and continue
+                ungetc(next_char, fp_input);
             }
-            else if((next_char=fgetc(fp_input))=='*')
-            {
-                while(((next_char=fgetc(fp_input))!='*')&&((next_char=fgetc(fp_input))!='/'));
-                c=next_char;
-                next_char=0;
-            }
-            else
-            {
-                ungetc(next_char,fp_input);
-            }            
         }
+        // write the character to the output file if it's not a newline
         if (c != '\n' && c != '\r') {
             fputc(c, fp_output);
         }
-        
     }
+
     fclose(fp_input);
+    fclose(fp_output);
     return fp_output;
 }
 char *current = 0;
